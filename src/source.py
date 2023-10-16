@@ -38,7 +38,7 @@ def getAnnEIA(ID, key):
   # ID <- unlist(strsplit(ID, ";"))
   # key <- unlist(strsplit(key, ";"))
 
-  url <- paste("https://api.eia.gov/v2/seriesid/", ID, "?api_key=", key, "&out=xml", sep="")
+  url = "https://api.eia.gov/v2/seriesid/" + ID + "?api_key=" + key + "&out=xml"
 
   doc <- httr::GET(url)
 
