@@ -17,11 +17,11 @@ def getEIA(ID, key):
         case ".Q":
             return(getQEIA(ID, key))
         case ".M":
-            getMonEIA(ID, key)
+            return(getMonEIA(ID, key))
         case ".W":
-            getWDEIA(ID, key)
+            return(getWDEIA(ID, key))
         case ".D":
-            getWDEIA(ID, key)
+            return(getWDEIA(ID, key))
         case ".H":
             getHEIA_UTC(ID, key)
         case "HL":
@@ -58,6 +58,15 @@ def getQEIA(ID, key):
     return energy_data
     
 
+def getMonEIA(ID, key):
+
+    url = "https://api.eia.gov/v2/seriesid/" + ID + "?api_key=" + key + "&out=xml"
+    doc = requests.get(url)
+    json_data = doc.json() 
+    energy_data = pd.json_normalize(json_data['response']['data'])
+    energy_data = energy_data.set_index(pd.to_datetime(energy_data['period'], format="%Y-%m"), drop=True)
+    energy_data = energy_data.drop(['period'], axis=1)
+    return energy_data
 
 ## to test
 with open('/home/matt/eia_api_key.txt', 'r') as f:
@@ -68,3 +77,7 @@ getEIA(ID = AID, key = key)
 
 QID = "ELEC.GEN.ALL-AK-99.Q"
 getEIA(ID = QID, key = key)
+
+
+MID = "ELEC.GEN.ALL-AK-99.M"
+getEIA(ID = MID, key = key)
