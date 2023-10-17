@@ -15,7 +15,7 @@ def getEIA(ID, key):
         case ".A":
             return(getAnnEIA(ID, key))
         case ".Q":
-            getQEIA(ID, key)
+            return(getQEIA(ID, key))
         case ".M":
             getMonEIA(ID, key)
         case ".W":
@@ -36,10 +36,6 @@ def getEIA(ID, key):
 #' @returns pandas time series.
 def getAnnEIA(ID, key):
 
-    # I don't think we need the following two lines.
-  # ID <- unlist(strsplit(ID, ";"))
-  # key <- unlist(strsplit(key, ";"))
-
     url = "https://api.eia.gov/v2/seriesid/" + ID + "?api_key=" + key + "&out=xml"
     doc = requests.get(url)
     json_data = doc.json() 
@@ -50,13 +46,25 @@ def getAnnEIA(ID, key):
     return energy_data
 
 
+def getQEIA(ID, key):
+
+    url = "https://api.eia.gov/v2/seriesid/" + ID + "?api_key=" + key + "&out=xml"
+    doc = requests.get(url)
+    json_data = doc.json() 
+    energy_data = pd.json_normalize(json_data['response']['data'])
+    ## index below is a periodindex.  Is this OK?
+    energy_data = energy_data.set_index(pd.PeriodIndex(energy_data['period'], freq='Q'), drop=True)
+    energy_data = energy_data.drop(['period'], axis=1)
+    return energy_data
+    
+
 
 ## to test
 with open('/home/matt/eia_api_key.txt', 'r') as f:
   key = f.read().rstrip('\n')
 
-ID = 'ELEC.GEN.ALL-AK-99.A'
+AID = 'ELEC.GEN.ALL-AK-99.A'
+getEIA(ID = AID, key = key)
 
-getEIA(ID = ID, key = key)
-gen = getEIA(ID = ID, key = key)
-gen
+QID = "ELEC.GEN.ALL-AK-99.Q"
+getEIA(ID = QID, key = key)
