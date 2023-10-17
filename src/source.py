@@ -23,9 +23,9 @@ def getEIA(ID, key):
         case ".D":
             return(getWDEIA(ID, key))
         case ".H":
-            getHEIA_UTC(ID, key)
+            return(getHEIA_UTC(ID, key))
         case "HL":
-            getHEIA_L(ID, key)
+            return(getHEIA_L(ID, key))
         case _:
             print("ERROR: The last character of your ID is not one of the possible sampling frequencies (A, Q, M, W, D, or H)")
 
@@ -68,6 +68,16 @@ def getMonEIA(ID, key):
     energy_data = energy_data.drop(['period'], axis=1)
     return energy_data
 
+def getWDEIA(ID, key):
+
+    url = "https://api.eia.gov/v2/seriesid/" + ID + "?api_key=" + key + "&out=xml"
+    doc = requests.get(url)
+    json_data = doc.json() 
+    energy_data = pd.json_normalize(json_data['response']['data'])
+    energy_data = energy_data.set_index(pd.to_datetime(energy_data['period'], format="%Y-%m-%d"), drop=True)
+    energy_data = energy_data.drop(['period'], axis=1)
+    return energy_data
+
 ## to test
 with open('/home/matt/eia_api_key.txt', 'r') as f:
   key = f.read().rstrip('\n')
@@ -78,6 +88,11 @@ getEIA(ID = AID, key = key)
 QID = "ELEC.GEN.ALL-AK-99.Q"
 getEIA(ID = QID, key = key)
 
-
 MID = "ELEC.GEN.ALL-AK-99.M"
 getEIA(ID = MID, key = key)
+
+WID = "NG.RNGWHHD.W"
+getEIA(ID = WID, key = key)
+
+DID = "NG.RNGWHHD.D"
+getEIA(ID = DID, key = key)
