@@ -1,4 +1,6 @@
 import pandas as pd
+import requests
+import json
 
 def last_two_char(x):
     return x[-2:]
@@ -11,7 +13,7 @@ def last_two_char(x):
 def getEIA(ID, key):
     match last_two_char(ID):
         case ".A":
-            getAnnEIA(ID, key)
+            return(getAnnEIA(ID, key))
         case ".Q":
             getQEIA(ID, key)
         case ".M":
@@ -25,7 +27,7 @@ def getEIA(ID, key):
         case "HL":
             getHEIA_L(ID, key)
         case _:
-            print("ERROR: The last character of your ID is not one of the possible sampling frequencies (A, Q, M, W, D, or H)"))
+            print("ERROR: The last character of your ID is not one of the possible sampling frequencies (A, Q, M, W, D, or H)")
 
 #' Download annual series data via the EIA API.  Do not use this function directly.
 #' 
@@ -38,23 +40,23 @@ def getAnnEIA(ID, key):
   # ID <- unlist(strsplit(ID, ";"))
   # key <- unlist(strsplit(key, ";"))
 
-  url = "https://api.eia.gov/v2/seriesid/" + ID + "?api_key=" + key + "&out=xml"
+    url = "https://api.eia.gov/v2/seriesid/" + ID + "?api_key=" + key + "&out=xml"
+    doc = requests.get(url)
+    json_data = doc.json() 
+    energy_data = pd.json_normalize(json_data['response']['data'])
+    ## the following line converts the year to yyyy-01-01.  
+    ## it may be more appropriate to change it to yyyy-12-31.
+    energy_data = energy_data.set_index(pd.to_datetime(energy_data['period'], format="%Y"), drop=True)
+    return energy_data
 
-  doc <- httr::GET(url)
 
-  date <- fromJSON(content(doc, "text"))$response$data$period
-  values <- as.numeric(fromJSON(content(doc, "text"))$response$data$value)
-  if(length(values) == 0)
-  {
-  values <- as.numeric(fromJSON(content(doc, "text"))$response$data$price)
-  }
 
-  date <- as.Date(paste(as.character(date), "-12-31", sep=""), "%Y-%m-%d")
+## to test
+with open('/home/matt/eia_api_key.txt', 'r') as f:
+  key = f.read().rstrip('\n')
 
-  xts_data <- xts(values, order.by=date)
-  names(xts_data) <- sapply(strsplit(ID, "-"), paste, collapse = ".")
+ID = 'ELEC.GEN.ALL-AK-99.A'
 
-  temp <- assign(sapply(strsplit(ID, "-"), paste, collapse = "."), xts_data)
-  return(temp)
-}
-
+getEIA(ID = ID, key = key)
+gen = getEIA(ID = ID, key = key)
+gen
