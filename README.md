@@ -17,7 +17,7 @@ This package has one function `getEIA`.  It allows you to pull a time series (gi
 
 which returns:
 
-`
+```
                           respondent             respondent-name type type-name  value    value-units
 period                                                                                               
 2023-10-18 16:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16355  megawatthours
@@ -33,4 +33,4 @@ period
 2023-03-24 09:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  15849  megawatthours
 
 [5000 rows x 6 columns]
-`
+```
