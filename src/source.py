@@ -78,21 +78,36 @@ def getWDEIA(ID, key):
     energy_data = energy_data.drop(['period'], axis=1)
     return energy_data
 
-## to test
-with open('/home/matt/eia_api_key.txt', 'r') as f:
-  key = f.read().rstrip('\n')
+def getHEIA_UTC(ID, key):
+    """
+    Format of period:
+    2023-03-24T08
+    R version also handled the following format, but haven't seen it in .H data yet:
+    UTC: 20200509T19Z
+    """
 
-AID = 'ELEC.GEN.ALL-AK-99.A'
-getEIA(ID = AID, key = key)
+    url = "https://api.eia.gov/v2/seriesid/" + ID + "?api_key=" + key + "&out=xml"
+    doc = requests.get(url)
+    json_data = doc.json() 
+    energy_data = pd.json_normalize(json_data['response']['data'])
+    ## looks like pandas handles the time perfectly by itself
+    energy_data = energy_data.set_index(pd.to_datetime(energy_data['period']), drop=True)
+    energy_data = energy_data.drop(['period'], axis=1)
+    return energy_data
 
-QID = "ELEC.GEN.ALL-AK-99.Q"
-getEIA(ID = QID, key = key)
+def getHEIA_L(ID, key):
+    """
+    period has a UTC offset: 2023-03-24T13-05
+    looks like pandas handles it
+    """
 
-MID = "ELEC.GEN.ALL-AK-99.M"
-getEIA(ID = MID, key = key)
+    url = "https://api.eia.gov/v2/seriesid/" + ID + "?api_key=" + key + "&out=xml"
+    doc = requests.get(url)
+    json_data = doc.json() 
+    energy_data = pd.json_normalize(json_data['response']['data'])
+    ## looks like pandas handles the time UTC offset
+    energy_data = energy_data.set_index(pd.to_datetime(energy_data['period']), drop=True)
+    energy_data = energy_data.drop(['period'], axis=1)
+    return energy_data
 
-WID = "NG.RNGWHHD.W"
-getEIA(ID = WID, key = key)
 
-DID = "NG.RNGWHHD.D"
-getEIA(ID = DID, key = key)
