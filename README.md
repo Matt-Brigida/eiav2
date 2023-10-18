@@ -13,7 +13,24 @@ This package provides programmatic access to the Energy Information Administrati
 
 This package has one function `getEIA`.  It allows you to pull a time series (given by the series ID).  The resulting object is a pandas dataframe.  For example, assume you have read your api key as a string into `key`, you can pull a series with:
 
-`getEIA(ID = 'ELEC.GEN.ALL-AK-99.A', key = key)`
+`getEIA(ID = 'EBA.TVA-ALL.D.HL', key = key)`
 
+which returns:
 
+`
+                          respondent             respondent-name type type-name  value    value-units
+period                                                                                               
+2023-10-18 16:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16355  megawatthours
+2023-10-18 15:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16279  megawatthours
+2023-10-18 14:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16281  megawatthours
+2023-10-18 13:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16422  megawatthours
+2023-10-18 12:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16390  megawatthours
+...                              ...                         ...  ...       ...    ...            ...
+2023-03-24 13:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16607  megawatthours
+2023-03-24 12:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16449  megawatthours
+2023-03-24 11:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16536  megawatthours
+2023-03-24 10:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16183  megawatthours
+2023-03-24 09:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  15849  megawatthours
 
+[5000 rows x 6 columns]
+`
