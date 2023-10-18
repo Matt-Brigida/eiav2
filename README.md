@@ -4,7 +4,7 @@ Python wrapper compatible with version 2 of the EIA's API.  To pull an energy se
 
 1.  Go to [EIA's Opendata website](https://www.eia.gov/opendata/).
 2.  Go to the "Bulk File Downloads" by scrolling down a bit and looking on the right margin.
-3.  Choose the bulk download for the category that contains the series you want.  Foe example if it is a Crude Oil series download the "Petroleum" file.
+3.  Choose the bulk download for the category that contains the series you want.  For example if it is a Crude Oil series download the "Petroleum" file.
 4.  After the file downloads unzip it and find the Series ID you want. 
 
 Note you only have to do the above once to get the Series ID.
