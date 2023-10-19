@@ -34,3 +34,43 @@ period
 
 [5000 rows x 6 columns]
 ```
+
+# Installing and Using
+
+The package is not yet on PyPi, however there is a wheel in `dists/` in this repo.  Copy the wheel into a directory and you can do the following in the directory with the wheel.  Note, the next 4 commands are in the `bash` prompt.
+
+`python3 -m venv ./myvenv --system-site-packages`
+
+Note I am using `--system-site-packages` here assuming you have the `pandas` and `requests` libraries installed system wide.  If you do not then remove the flag and install the libraries into your virtual environment.
+
+`source ./myvenv/bin/activate`
+
+`pip install eiav2-0.0.1-py3-none-any.whl`
+
+`python`
+
+And then in python:
+
+`from eiav2 import eiav2`
+
+Read in your EIA API key and:
+
+```
+eiav2.getEIA(ID = 'EBA.TVA-ALL.D.HL', key = key)
+                          respondent             respondent-name type type-name  value    value-units
+period                                                                                               
+2023-10-18 16:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16355  megawatthours
+2023-10-18 15:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16279  megawatthours
+2023-10-18 14:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16281  megawatthours
+2023-10-18 13:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16422  megawatthours
+2023-10-18 12:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16390  megawatthours
+...                              ...                         ...  ...       ...    ...            ...
+2023-03-24 13:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16607  megawatthours
+2023-03-24 12:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16449  megawatthours
+2023-03-24 11:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16536  megawatthours
+2023-03-24 10:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16183  megawatthours
+2023-03-24 09:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  15849  megawatthours
+
+[5000 rows x 6 columns]
+```
+
