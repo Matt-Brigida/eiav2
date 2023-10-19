@@ -55,8 +55,10 @@ And then in python:
 
 Read in your EIA API key and:
 
+
+`eiav2.getEIA(ID = 'EBA.TVA-ALL.D.HL', key = key)`
+
 ```
-eiav2.getEIA(ID = 'EBA.TVA-ALL.D.HL', key = key)
                           respondent             respondent-name type type-name  value    value-units
 period                                                                                               
 2023-10-18 16:00:00-05:00        TVA  Tennessee Valley Authority    D    Demand  16355  megawatthours
